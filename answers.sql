@@ -16,7 +16,7 @@ VALUES
     (102, 'Jane Smith', 'Mouse'),
     (103, 'Emily Clark', 'Phone');
 
--- question 2
+-- question 2 step 1
 -- Create a separate table for customers
 CREATE TABLE Customers (
     CustomerID INT PRIMARY KEY AUTO_INCREMENT,
@@ -30,7 +30,7 @@ VALUES
     ('Jane Smith'),
     ('Emily Clark');
 
--- question 3
+-- step 2
 -- Create a new OrderDetails_2NF table without CustomerName
 CREATE TABLE OrderDetails_2NF (
     OrderID INT,
