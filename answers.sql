@@ -1,10 +1,19 @@
--- question 1
--- Create a new table with separate rows for each product in an order
-CREATE TABLE ProductDetail (
-    OrderID INT,
-    CustomerName VARCHAR(255),
-    Product VARCHAR(255)
+-- Creating a new table that conforms to 1NF
+CREATE TABLE ProductDetail_1NF (
+    OrderID INT,               -- Order identifier (Primary Key)
+    CustomerName VARCHAR(255), -- Customer's name
+    Product VARCHAR(255)       -- Single product per row
 );
+
+-- Inserting atomic data (each row contains only one product per order)
+INSERT INTO ProductDetail_1NF (OrderID, CustomerName, Product)
+VALUES
+    (101, 'John Doe', 'Laptop'),
+    (101, 'John Doe', 'Mouse'),
+    (102, 'Jane Smith', 'Tablet'),
+    (102, 'Jane Smith', 'Keyboard'),
+    (102, 'Jane Smith', 'Mouse'),
+    (103, 'Emily Clark', 'Phone');
 
 -- Insert data into the new normalized table
 INSERT INTO ProductDetail (OrderID, CustomerName, Product)
@@ -16,37 +25,33 @@ VALUES
     (102, 'Jane Smith', 'Mouse'),
     (103, 'Emily Clark', 'Phone');
 
--- question 2 step 1
--- Create a separate table for customers
-CREATE TABLE Customers (
-    CustomerID INT PRIMARY KEY AUTO_INCREMENT,
-    CustomerName VARCHAR(100)
+-- Creating the Orders table to store CustomerName separately
+CREATE TABLE Orders (
+    OrderID INT PRIMARY KEY,    -- Unique order identifier
+    CustomerName VARCHAR(255)   -- Customer information now in a separate table
 );
 
--- Insert customer details (removing dependency from OrderDetails)
-INSERT INTO Customers (CustomerName) 
-VALUES 
-    ('John Doe'),
-    ('Jane Smith'),
-    ('Emily Clark');
+-- Populating the Orders table
+INSERT INTO Orders (OrderID, CustomerName)
+VALUES
+    (101, 'John Doe'),
+    (102, 'Jane Smith'),
+    (103, 'Emily Clark');
 
--- step 2
--- Create a new OrderDetails_2NF table without CustomerName
-CREATE TABLE OrderDetails (
-    OrderID INT,
-    CustomerID INT,
-    Product VARCHAR(255),
-    Quantity INT,
-    PRIMARY KEY (OrderID, Product),
-    FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID)
+-- Creating the OrderProducts table, which ensures full dependence on OrderID + Product
+CREATE TABLE OrderProducts (
+    OrderID INT,               -- Order identifier (Foreign Key)
+    Product VARCHAR(255),      -- Product being ordered
+    Quantity INT,              -- Quantity of the product
+    FOREIGN KEY (OrderID) REFERENCES Orders(OrderID) -- Establishing relationship
 );
 
--- Insert order details while linking customers via CustomerID
-INSERT INTO OrderDetails (OrderID, CustomerID, Product, Quantity)
-VALUES 
-    (101, 1, 'Laptop', 2),
-    (101, 1, 'Mouse', 1),
-    (102, 2, 'Tablet', 3),
-    (102, 2, 'Keyboard', 1),
-    (102, 2, 'Mouse', 2),
-    (103, 3, 'Phone', 1);
+-- Populating OrderProducts table with atomic data
+INSERT INTO OrderProducts (OrderID, Product, Quantity)
+VALUES
+    (101, 'Laptop', 2),
+    (101, 'Mouse', 1),
+    (102, 'Tablet', 3),
+    (102, 'Keyboard', 1),
+    (102, 'Mouse', 2),
+    (103, 'Phone', 1);
