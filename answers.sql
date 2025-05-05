@@ -1,13 +1,13 @@
 -- question 1
 -- Create a new table with separate rows for each product in an order
-CREATE TABLE ProductDetail_1NF (
+CREATE TABLE ProductDetail (
     OrderID INT,
     CustomerName VARCHAR(255),
     Product VARCHAR(255)
 );
 
 -- Insert data into the new normalized table
-INSERT INTO ProductDetail_1NF (OrderID, CustomerName, Product)
+INSERT INTO ProductDetail (OrderID, CustomerName, Product)
 VALUES 
     (101, 'John Doe', 'Laptop'),
     (101, 'John Doe', 'Mouse'),
@@ -20,7 +20,7 @@ VALUES
 -- Create a separate table for customers
 CREATE TABLE Customers (
     CustomerID INT PRIMARY KEY AUTO_INCREMENT,
-    CustomerName VARCHAR(255)
+    CustomerName VARCHAR(100)
 );
 
 -- Insert customer details (removing dependency from OrderDetails)
@@ -32,7 +32,7 @@ VALUES
 
 -- step 2
 -- Create a new OrderDetails_2NF table without CustomerName
-CREATE TABLE OrderDetails_2NF (
+CREATE TABLE OrderDetails (
     OrderID INT,
     CustomerID INT,
     Product VARCHAR(255),
@@ -42,7 +42,7 @@ CREATE TABLE OrderDetails_2NF (
 );
 
 -- Insert order details while linking customers via CustomerID
-INSERT INTO OrderDetails_2NF (OrderID, CustomerID, Product, Quantity)
+INSERT INTO OrderDetails (OrderID, CustomerID, Product, Quantity)
 VALUES 
     (101, 1, 'Laptop', 2),
     (101, 1, 'Mouse', 1),
